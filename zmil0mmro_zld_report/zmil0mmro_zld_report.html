@@ -1,0 +1,2680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=ISO-8859-1" />
+<title>ZMIL0MMRO_ZLD_REPORT</title>
+<style type="text/css">
+.code{ font-family:"Courier New", Courier, monospace; color:#000; font-size:14px; background-color:#F2F4F7 }
+  .codeComment {font-family:"Courier New", Courier, monospace; color:#0000F0; font-size:14px; background-color:#F2F4F7 }
+  .normalBold{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; font-weight:800 }
+  .normalBoldLarge{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+</style>
+<style type="text/css">
+  .normal{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px }
+  .footer{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:12px; text-align: center }
+  h2{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:16px; font-weight:800 }
+  h3{ font-family:Arial, Helvetica, sans-serif; color:#000; font-size:14px; font-weight:800 }
+  .outerTable{
+   background-color:#E0E7ED;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-right-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+  .innerTable{
+   background-color:#F2F4F7;
+   width:100%;
+   border-top-width: thin;
+   border-right-width: thin;
+   border-bottom-width: thin;
+   border-left-width: thin;
+   border-top-style: solid;
+   border-right-style: solid;
+   border-bottom-style: solid;
+   border-left-style: solid;
+  }
+</style>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZMIL0MMRO_ZLD_REPORT</h2>
+<h3> Description: L & D report</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*---------------------------------------------------------------------*<br />
+*&nbsp;Report&nbsp;&nbsp;zmil0mmro_zld_report<br />
+*&nbsp;Author:&nbsp;Bijoy<br />
+*&nbsp;Dated&nbsp;:&nbsp;17.03.2003<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;L&nbsp;&&nbsp;D&nbsp;report&nbsp;as&nbsp;per&nbsp;the&nbsp;format&nbsp;provided&nbsp;by&nbsp;Dharmesh<br />
+*&nbsp;Changes&nbsp;-&nbsp;17-03-2003<br />
+*&nbsp;Exclude&nbsp;all&nbsp;closed&nbsp;orders<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;L&nbsp;&&nbsp;D&nbsp;Report&nbsp;Has&nbsp;been&nbsp;chenged&nbsp;with&nbsp;adding&nbsp;PO&nbsp;no.&nbsp;&&nbsp;PO&nbsp;Date&nbsp;column.<br />
+*&nbsp;Changed&nbsp;By:&nbsp;Prasad&nbsp;Gurjar<br />
+*&nbsp;Changed&nbsp;On:&nbsp;06/02/2014<br />
+*&nbsp;Add&nbsp;PO&nbsp;No.&nbsp;&&nbsp;PO&nbsp;Date<br />
+****PLEASE&nbsp;TAKE&nbsp;APPROVAL&nbsp;OF&nbsp;PRIME1&nbsp;TEAM&nbsp;BEFORE&nbsp;MAKING&nbsp;CHANGES&nbsp;IN&nbsp;THE&nbsp;FOREGROUND/BACKGROUND&nbsp;REPORT****<br />
+*----------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+REPORT  zmil0mmro_zld_report<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO&nbsp;STANDARD&nbsp;PAGE&nbsp;HEADING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINE-SIZE&nbsp;&nbsp;344<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINE-COUNT&nbsp;65(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE-ID&nbsp;zfi.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****PLEASE&nbsp;TAKE&nbsp;APPROVAL&nbsp;OF&nbsp;PRIME1&nbsp;TEAM&nbsp;BEFORE&nbsp;MAKING&nbsp;CHANGES&nbsp;IN&nbsp;THE&nbsp;FOREGROUND/BACKGROUND&nbsp;REPORT****<br />
+<br />
+   </div>
+   <div class="code">
+TYPE-POOLS:  slis.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**--&nbsp;Tables&nbsp;Declaration<br />
+   </div>
+   <div class="code">
+TABLES: vbak,vbfa,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbap,s804,makt,vbkd,&nbsp;adr6.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**--&nbsp;Data&nbsp;Declaration<br />
+<br />
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_vbak<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF i_vbak OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;LIKE&nbsp;vbak-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;LIKE&nbsp;vbak-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;LIKE&nbsp;vbak-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;LIKE&nbsp;vbak-vkbur,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knumv&nbsp;LIKE&nbsp;vbak-knumv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_vbak.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_vbap&nbsp;to&nbsp;select&nbsp;the&nbsp;sales&nbsp;document<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF i_vbap OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auart&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-auart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charg&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-charg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkaus&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vkaus,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knumv&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-knumv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-vkbur,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;klmeng&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;kna1-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstkd&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbkd-bstkd,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-arktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvlvt-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstdk_e&nbsp;&nbsp;LIKE&nbsp;vbkd-bstdk_e,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;issdf(1),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_vbap.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Add&nbsp;PO&nbsp;number&nbsp;and&nbsp;PO&nbsp;date&nbsp;from&nbsp;VBKD&nbsp;-&nbsp;Prasad&nbsp;Gurjar&nbsp;06/02/2014<br />
+   </div>
+   <div class="code">
+DATA : BEGIN OF i_vbkd OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;LIKE&nbsp;vbkd-vbeln,<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;LIKE&nbsp;vbkd-posnr,<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstkd&nbsp;LIKE&nbsp;vbkd-bstkd,&nbsp;"&nbsp;PO&nbsp;NUMBER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstdk&nbsp;LIKE&nbsp;vbkd-bstdk,&nbsp;"&nbsp;PO&nbsp;DATE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_vbkd.<br />
+"Till here-PG.<br />
+   </div>
+   <div class="codeComment">
+*-------------------------------Upto&nbsp;Here-------------------------------*<br />
+<br />
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_vbrk&nbsp;to&nbsp;select&nbsp;the&nbsp;sales&nbsp;invoice<br />
+<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF i_vbrk OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbelv&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbfa-vbelv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnv&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbfa-posnv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbfa-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnn&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbfa-posnn,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbtyp_n&nbsp;LIKE&nbsp;vbfa-vbtyp_n,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rfmng&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbfa-rfmng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbfa-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knumv&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbrk-knumv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbrk-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_vbrk.<br />
+<br />
+DATA: BEGIN OF i_vbrk_value OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;LIKE&nbsp;vbfa-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnn&nbsp;LIKE&nbsp;vbfa-posnn,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knumv&nbsp;LIKE&nbsp;vbrk-knumv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_vbrk_value.<br />
+<br />
+DATA: BEGIN OF i_vbap_disp OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-werks,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Plant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wname1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;t001w-name1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Plant&nbsp;Name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-spart,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Division<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-vkbur,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sales&nbsp;Office<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-kunnr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Cust&nbsp;Code<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kname1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;kna1-name1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Cust&nbsp;Name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-mvgr1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Mat&nbsp;Gr1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-arktx,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-matnr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Mat&nbsp;No.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-charg,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-erdat,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vbeln,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sales&nbsp;Doc&nbsp;no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-posnr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Item&nbsp;no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;month&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;2,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Month<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkaus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vkaus,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Usage&nbsp;Indicator<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-meins,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Base&nbsp;UOM<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knumv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-knumv,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Doc.&nbsp;Condition<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_klmeng&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_kbetr&nbsp;&nbsp;LIKE&nbsp;konv-kbetr,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Rate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_kwert&nbsp;&nbsp;LIKE&nbsp;konv-kwert,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Condition&nbsp;Value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_sales&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_cost&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_vbeln&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbrk-vbeln,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_posnr&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbrp-posnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_klmeng&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_kbetr&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kbetr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_kwert&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_sales&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_cost&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_credt&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-datum,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvlvt-bezei,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Usage&nbsp;Ind.&nbsp;desc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;makt-maktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matkl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mara-matkl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rvdate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstdk_e&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbkd-bstdk_e,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstkd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbkd-bstkd,&nbsp;"&nbsp;PO&nbsp;NUMBER<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstdk(10)&nbsp;&nbsp;TYPE&nbsp;c,&nbsp;"&nbsp;PO&nbsp;DATE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;knvv-kvgr1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Customer&nbsp;group1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kvgr2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;knvv-kvgr2,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Customer&nbsp;group1<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvv1t-bezei,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cg1&nbsp;desc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvv2t-bezei,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cg2&nbsp;desc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_vbap_disp.<br />
+<br />
+DATA: i_vbap_disp1 LIKE i_vbap_disp OCCURS 0 WITH HEADER LINE.<br />
+<br />
+DATA :  it_line(4096) TYPE c OCCURS 0 WITH HEADER LINE.<br />
+<br />
+DATA : jobname LIKE tbtcjob-jobname VALUE 'L&D Report CSV'.<br />
+DATA : jobcount         LIKE tbtcjob-jobcount,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print_parameters&nbsp;TYPE&nbsp;pri_params.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****************SOC&nbsp;ATC&nbsp;on&nbsp;12/7/2024&nbsp;by&nbsp;EY_MAN_ABAP************************************<br />
+   </div>
+   <div class="code">
+DATA : lv_mat(18).<br />
+   </div>
+   <div class="codeComment">
+*****************EOC&nbsp;ATC&nbsp;on&nbsp;12/7/2024&nbsp;by&nbsp;EY_MAN_ABAP************************************<br />
+   </div>
+   <div class="code">
+DATA : BEGIN OF itab OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;spart&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-spart,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-vkbur,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matkl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mara-matkl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vbeln,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sales&nbsp;Doc&nbsp;no.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-erdat,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkaus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vkaus,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbak-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wname1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;t001w-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvlvt-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kname1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;kna1-name1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;makt-maktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_klmeng&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_cost&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zld_sales&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_klmeng&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_cost&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_sales&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;knvv-kvgr1,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Customer&nbsp;group1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kvgr2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;knvv-kvgr2,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Customer&nbsp;group1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvv1t-bezei,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cg1&nbsp;desc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvv2t-bezei,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cg2&nbsp;desc<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;itab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_vbap_re&nbsp;to&nbsp;select&nbsp;the&nbsp;sales&nbsp;document<br />
+<br />
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_konv_zld<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF i_konv_zld OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;knumv&nbsp;LIKE&nbsp;konv-knumv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kposn&nbsp;LIKE&nbsp;konv-kposn,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kschl&nbsp;LIKE&nbsp;konv-kschl,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kbetr&nbsp;LIKE&nbsp;konv-kbetr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kwert&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_konv_zld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_konv_rv<br />
+   </div>
+   <div class="code">
+DATA: i_konv_rv LIKE i_konv_zld OCCURS 0 WITH HEADER LINE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;Table&nbsp;for&nbsp;i_tvlvt<br />
+   </div>
+   <div class="code">
+DATA: i_tvlvt LIKE tvlvt OCCURS 0 WITH HEADER LINE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;i_s084<br />
+<br />
+*--&nbsp;Change&nbsp;by&nbsp;Samir<br />
+*&nbsp;data:&nbsp;i_S804&nbsp;like&nbsp;S804&nbsp;occurs&nbsp;0&nbsp;with&nbsp;header&nbsp;line.<br />
+<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF i_s804 OCCURS 0 ,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mseg-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;s804-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;s804-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mseg-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volum_01&nbsp;LIKE&nbsp;s804-volum_01,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umkzwi5&nbsp;&nbsp;LIKE&nbsp;s804-umkzwi5,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umren&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;marm-umren,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umrez&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;marm-umrez,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_s804.<br />
+<br />
+DATA : v_stzref LIKE vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_stzsdf&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_stdel&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_stgd&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v_stzre&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***-----&nbsp;Change&nbsp;by&nbsp;Samir&nbsp;on&nbsp;3&nbsp;May&nbsp;2002&nbsp;to&nbsp;add&nbsp;Qty&nbsp;in&nbsp;ST&nbsp;unit<br />
+***-----&nbsp;change&nbsp;asked&nbsp;by&nbsp;Maheshdk<br />
+   </div>
+   <div class="code">
+DATA : BEGIN OF i_st OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;marm-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umren&nbsp;LIKE&nbsp;marm-umren,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umrez&nbsp;LIKE&nbsp;marm-umrez,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_st.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Data&nbsp;Declaration&nbsp;for&nbsp;drill&nbsp;down&nbsp;report<br />
+   </div>
+   <div class="code">
+DATA: w_matnr     LIKE vbap-matnr.<br />
+DATA: w_werks     LIKE vbap-werks.<br />
+DATA: w_vkaus     LIKE vbap-vkaus.<br />
+DATA: w_mvgr1     LIKE vbap-mvgr1.<br />
+DATA: v_plantname LIKE t001w-name1.<br />
+DATA: v_skudesc   LIKE makt-maktx.<br />
+DATA: v_brand     LIKE mara-matkl.<br />
+DATA: v_rvdate    LIKE vbrk-fkdat.<br />
+DATA: v_zld_tot   LIKE konv-kwert.<br />
+DATA: v_rv_tot    LIKE konv-kwert.<br />
+DATA: line        LIKE i_vbap_disp.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Internal&nbsp;table&nbsp;for&nbsp;display<br />
+   </div>
+   <div class="code">
+DATA: BEGIN OF i_disp_tab OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-arktx,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkaus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-vkaus,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;tvlvt-bezei,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-meins,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uom_rec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-meins,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;test<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_zld&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_rv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_zsdf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_lips&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;lips-lgmng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_zld&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_rv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_lips&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_zld&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_rv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_lips&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_zre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_zre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_zre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_zre_zref&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_zre_zref&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_zre_zref&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_zre_zsdf&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_zre_zsdf&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_zre_zsdf&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_zre_lips&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cost_zre_lips&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sales_zre_lips&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volum_01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;s804-volum_01,<br />
+   </div>
+   <div class="codeComment">
+*-----<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umkzwi5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;s804-umkzwi5,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qty_rec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;val_rec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kbetr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;totalld&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kwert,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volum_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;s804-volum_01,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vstzld&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vstrv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vstdel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vstzre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-klmeng,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_disp_tab.<br />
+<br />
+<br />
+DATA: BEGIN OF i_marm OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;mseg-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umren&nbsp;LIKE&nbsp;marm-umren,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umrez&nbsp;LIKE&nbsp;marm-umrez,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_marm.<br />
+<br />
+DATA : BEGIN OF i_sd OCCURS 0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;werks&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mseg-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;vbap-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;mseg-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;recovery&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstme&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;a066-bstme,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kbetr&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;konv-kbetr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umren&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;marm-umren,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;umrez&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;marm-umrez,<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;i_sd.<br />
+<br />
+DATA: v VALUE '|'.      " Vertical line for display report<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Data&nbsp;Declaration<br />
+<br />
+   </div>
+   <div class="code">
+DATA: w_cost_lips LIKE konv-kwert.<br />
+DATA: w_sales_lips LIKE konv-kwert.<br />
+<br />
+DATA : w_qtyrec LIKE vbap-klmeng.<br />
+DATA : w_valrec LIKE konv-kbetr.<br />
+DATA: w_sales_zref LIKE konv-kwert.<br />
+DATA: w_sales_zre LIKE konv-kwert.<br />
+DATA: w_totalld LIKE konv-kwert.<br />
+DATA: w_vbelv LIKE vbfa-vbelv.<br />
+<br />
+<br />
+DATA : ld_filename TYPE string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_fullpath&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_result&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dat1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*ALV&nbsp;data&nbsp;declarations<br />
+   </div>
+   <div class="code">
+DATA: fieldcatalog  TYPE slis_t_fieldcat_alv WITH HEADER LINE,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_tab_group&nbsp;&nbsp;TYPE&nbsp;slis_t_sp_group_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_layout_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_repid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;sy-repid,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gt_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gd_prntparams&nbsp;TYPE&nbsp;slis_print_alv.<br />
+gd_layout-colwidth_optimize = 'X'.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****************************&nbsp;Added&nbsp;by&nbsp;EY&nbsp;:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;15.01.2025)<br />
+   </div>
+   <div class="code">
+TYPES: BEGIN OF ty_vbfa,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbelv&nbsp;&nbsp;&nbsp;TYPE&nbsp;vbelv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat&nbsp;&nbsp;&nbsp;TYPE&nbsp;erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erzet&nbsp;&nbsp;&nbsp;TYPE&nbsp;&nbsp;erzet,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbtyp_n&nbsp;TYPE&nbsp;vbtyp_n,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;ty_vbfa.<br />
+<br />
+DATA: it_vbfa_t TYPE TABLE OF ty_vbfa,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_vbfa&nbsp;&nbsp;&nbsp;TYPE&nbsp;TABLE&nbsp;OF&nbsp;ty_vbfa,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_vbfa&nbsp;&nbsp;&nbsp;TYPE&nbsp;ty_vbfa.<br />
+   </div>
+   <div class="codeComment">
+****************************&nbsp;Added&nbsp;by&nbsp;EY&nbsp;:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;15.01.2025<br />
+<br />
+**--&nbsp;Selection&nbsp;Screen<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN SKIP 1.<br />
+SELECTION-SCREEN BEGIN OF BLOCK sel_cri WITH FRAME TITLE TEXT-001.<br />
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;s_kunnr&nbsp;FOR&nbsp;vbak-kunnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vkbur&nbsp;FOR&nbsp;vbak-vkbur,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_erdat&nbsp;FOR&nbsp;vbak-erdat&nbsp;OBLIGATORY,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_werks&nbsp;FOR&nbsp;vbap-werks,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_matnr&nbsp;FOR&nbsp;vbap-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_mvgr1&nbsp;FOR&nbsp;vbap-mvgr1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_vkaus&nbsp;FOR&nbsp;vbap-vkaus.<br />
+SELECTION-SCREEN END OF BLOCK sel_cri.<br />
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME.<br />
+&nbsp;&nbsp;PARAMETERS&nbsp;:&nbsp;detail&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;rad,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;summary&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;rad,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_del&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;DEFAULT&nbsp;'|'.<br />
+SELECTION-SCREEN END OF BLOCK b1.<br />
+<br />
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE TEXT-002.<br />
+&nbsp;&nbsp;PARAMETERS:&nbsp;alv&nbsp;&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dis&nbsp;USER-COMMAND&nbsp;rusr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT&nbsp;'X',<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fore&nbsp;&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dis,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;backg&nbsp;RADIOBUTTON&nbsp;GROUP&nbsp;dis.<br />
+<br />
+&nbsp;&nbsp;PARAMETERS&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filepath&nbsp;LIKE&nbsp;ibipparms-path&nbsp;OBLIGATORY&nbsp;DEFAULT<br />
+   </div>
+   <div class="codeComment">
+*'/home/rakeshs/L&DReport.csv'&nbsp;MODIF&nbsp;ID&nbsp;scr.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;'/azal11/integration/India/Finance/Others/L&DReport.csv'&nbsp;MODIF&nbsp;ID&nbsp;scr.<br />
+   </div>
+   <div class="codeComment">
+*PARAMETERS&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email&nbsp;TYPE&nbsp;ad_smtpadr&nbsp;MODIF&nbsp;ID&nbsp;scr&nbsp;MEMORY&nbsp;ID&nbsp;m2.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT-OPTIONS:&nbsp;email&nbsp;FOR&nbsp;adr6-smtp_addr&nbsp;NO&nbsp;INTERVALS&nbsp;MODIF&nbsp;ID&nbsp;scr<br />
+&nbsp;&nbsp;&nbsp;MEMORY&nbsp;ID&nbsp;m2.<br />
+SELECTION-SCREEN END OF BLOCK b2.<br />
+<br />
+<br />
+AT SELECTION-SCREEN OUTPUT.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;s_erdat-high&nbsp;GT&nbsp;'20021130'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000(zfi)&nbsp;WITH&nbsp;'Selection&nbsp;Date&nbsp;cannot&nbsp;exceed&nbsp;30th&nbsp;Nov&nbsp;2002'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;ENDIF.<br />
+*<br />
+<br />
+**--&nbsp;Start&nbsp;of&nbsp;Selection<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;fore&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'SCR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;backg&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'SCR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ELSEIF&nbsp;alv&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;screen-group1&nbsp;=&nbsp;'SCR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;screen-active&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;backg&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;background.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;the&nbsp;qty&nbsp;of&nbsp;ZL&D&nbsp;data<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_qty_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;the&nbsp;COST&nbsp;value&nbsp;and&nbsp;Sales&nbsp;Value&nbsp;for&nbsp;ZL&D&nbsp;RV&nbsp;documents<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_value_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;the&nbsp;Sales&nbsp;and&nbsp;Billing&nbsp;for&nbsp;the&nbsp;selection&nbsp;criteria<br />
+*&nbsp;&nbsp;PERFORM&nbsp;select_sales_biling.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;build_display_tab.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**--&nbsp;End&nbsp;of&nbsp;Selection<br />
+   </div>
+   <div class="code">
+END-OF-SELECTION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;rad1&nbsp;=&nbsp;'X'.<br />
+*&nbsp;Build&nbsp;the&nbsp;internal&nbsp;table&nbsp;i_disp_tab&nbsp;for&nbsp;display<br />
+*&nbsp;&nbsp;&nbsp;PERFORM&nbsp;build_display_tab.<br />
+<br />
+*&nbsp;Discard&nbsp;records&nbsp;if&nbsp;REF_SDF&nbsp;or&nbsp;SDF_DEL&nbsp;check&nbsp;box&nbsp;are&nbsp;selected<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;checkbox_selection_rad1.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;summary&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;summary_data.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;alv&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;summary_details.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;fore&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;foreground.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ELSEIF&nbsp;detail&nbsp;=&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;alv&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_detail_heading.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_report.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;fore&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;foreground.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;ELSEIF&nbsp;rad2&nbsp;=&nbsp;'X'.<br />
+<br />
+*&nbsp;Discard&nbsp;records&nbsp;if&nbsp;REF_SDF&nbsp;or&nbsp;SDF_DEL&nbsp;check&nbsp;box&nbsp;are&nbsp;selected<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;checkbox_selection_rad2.<br />
+<br />
+*&nbsp;Displat&nbsp;the&nbsp;detailed&nbsp;report<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;display_detailed_report_total.<br />
+<br />
+*&nbsp;ENDIF.<br />
+<br />
+*&nbsp;At&nbsp;Line&nbsp;Selection.<br />
+   </div>
+   <div class="code">
+AT LINE-SELECTION.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;for&nbsp;a&nbsp;valid&nbsp;line&nbsp;selection<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR:&nbsp;w_matnr,&nbsp;w_werks,&nbsp;w_vkaus,&nbsp;w_mvgr1.<br />
+&nbsp;&nbsp;w_werks&nbsp;=&nbsp;sy-lisel+1(4).<br />
+&nbsp;&nbsp;w_mvgr1&nbsp;=&nbsp;sy-lisel+6(3).<br />
+&nbsp;&nbsp;w_matnr&nbsp;=&nbsp;sy-lisel+10(10).<br />
+&nbsp;&nbsp;w_vkaus&nbsp;=&nbsp;sy-lisel+42(3).<br />
+&nbsp;&nbsp;SHIFT&nbsp;w_matnr&nbsp;RIGHT&nbsp;DELETING&nbsp;TRAILING&nbsp;space.<br />
+&nbsp;&nbsp;TRANSLATE&nbsp;w_matnr&nbsp;USING&nbsp;'&nbsp;0'.<br />
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_vbap&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;w_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;=&nbsp;w_mvgr1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;=&nbsp;w_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vkaus&nbsp;=&nbsp;w_vkaus.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;w_matnr,&nbsp;w_werks,&nbsp;w_vkaus,&nbsp;w_mvgr1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;e000(zsd)&nbsp;WITH&nbsp;TEXT-002.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Display&nbsp;the&nbsp;details&nbsp;for&nbsp;the&nbsp;line&nbsp;selected<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;display_detailed_report.<br />
+<br />
+   </div>
+   <div class="codeComment">
+**--&nbsp;Top&nbsp;of&nbsp;page<br />
+   </div>
+   <div class="code">
+TOP-OF-PAGE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Write&nbsp;the&nbsp;Selection&nbsp;criteria&nbsp;selected&nbsp;by&nbsp;the&nbsp;USER<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;write_selection_criteria.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Write&nbsp;the&nbsp;Report&nbsp;Header&nbsp;title<br />
+*&nbsp;PERFORM&nbsp;write_header.<br />
+<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_VBAP_ZLD<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_vbap_zld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;To&nbsp;retreive&nbsp;header&nbsp;data.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;DISTINCT&nbsp;c~werks&nbsp;a~vkbur&nbsp;a~kunnr&nbsp;a~knumv&nbsp;b~name1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c~matnr&nbsp;c~arktx&nbsp;a~vbeln&nbsp;c~posnr&nbsp;c~erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c~vkaus&nbsp;c~klmeng&nbsp;c~meins&nbsp;c~charg&nbsp;f~bstkd&nbsp;c~mvgr1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a~auart&nbsp;f~bstdk_e<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;i_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbak&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;kna1&nbsp;&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~kunnr&nbsp;=&nbsp;b~kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;vbap&nbsp;&nbsp;AS&nbsp;c&nbsp;ON&nbsp;a~vbeln&nbsp;=&nbsp;c~vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;mvke&nbsp;&nbsp;AS&nbsp;e&nbsp;ON&nbsp;c~matnr&nbsp;=&nbsp;e~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;vbkd&nbsp;&nbsp;AS&nbsp;f&nbsp;ON&nbsp;f~vbeln&nbsp;=&nbsp;c~vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;a~erdat&nbsp;IN&nbsp;s_erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;a~kunnr&nbsp;IN&nbsp;s_kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;a~vkbur&nbsp;IN&nbsp;s_vkbur<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;(&nbsp;a~auart&nbsp;=&nbsp;'ZL&D'&nbsp;OR&nbsp;a~auart&nbsp;=&nbsp;'ZLD1'&nbsp;OR&nbsp;a~auart&nbsp;=&nbsp;'ZBLD')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;c~vkaus&nbsp;IN&nbsp;s_vkaus<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;c~werks&nbsp;IN&nbsp;s_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;c~matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;c~mvgr1&nbsp;IN&nbsp;s_mvgr1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"29.07.2015<br />
+   </div>
+   <div class="codeComment">
+*---&nbsp;Bijoy&nbsp;-17/03/2003&nbsp;-&nbsp;Show&nbsp;only&nbsp;open&nbsp;orders<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;"AND&nbsp;&nbsp;&nbsp;(&nbsp;c~abgru&nbsp;EQ&nbsp;space&nbsp;or&nbsp;c~abgru&nbsp;eq&nbsp;'Z6'&nbsp;).<br />
+   </div>
+   <div class="codeComment">
+*---End&nbsp;of&nbsp;change<br />
+<br />
+***----&nbsp;To&nbsp;get&nbsp;conversion&nbsp;factor&nbsp;for&nbsp;ST&nbsp;unit<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;IF&nbsp;NOT&nbsp;(&nbsp;i_vbap[]&nbsp;IS&nbsp;INITIAL&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;matnr&nbsp;umren&nbsp;umrez&nbsp;INTO&nbsp;TABLE&nbsp;i_st<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;marm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;i_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;i_vbap-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;meinh&nbsp;=&nbsp;'ST'.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;the&nbsp;Description&nbsp;for&nbsp;Usage&nbsp;Indicator&nbsp;VKAUS&nbsp;from&nbsp;TVLVT<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;tvlvt<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;i_tvlvt.<br />
+   </div>
+   <div class="codeComment">
+**-------------------------------Upto&nbsp;Here-------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbap.<br />
+   </div>
+   <div class="codeComment">
+*---&nbsp;Check&nbsp;for&nbsp;corresponding&nbsp;RV&nbsp;and&nbsp;load&nbsp;it&nbsp;from&nbsp;invoice&nbsp;table<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;w_vbelv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;a~vbelv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~posnv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~posnn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~vbtyp_n<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~rfmng<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~meins<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b~knumv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a~erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPENDING&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;i_vbrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbfa&nbsp;AS&nbsp;a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;vbrk&nbsp;AS&nbsp;b&nbsp;ON&nbsp;a~vbeln&nbsp;=&nbsp;b~vbeln&nbsp;&nbsp;"Mandar<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbelv&nbsp;=&nbsp;i_vbap-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;posnv&nbsp;=&nbsp;i_vbap-posnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;vbtyp_n&nbsp;=&nbsp;'O'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~draft&nbsp;=&nbsp;'&nbsp;'.&nbsp;"ADDED&nbsp;BY&nbsp;EY_ASH_ABAP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap-issdf&nbsp;=&nbsp;'Y'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_vbap.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-bezei&nbsp;IS&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_tvlvt&nbsp;WITH&nbsp;KEY&nbsp;abrvw&nbsp;=&nbsp;i_vbap-vkaus.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap-bezei&nbsp;=&nbsp;i_tvlvt-bezei.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_vbap&nbsp;TRANSPORTING&nbsp;bezei<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vkaus&nbsp;=&nbsp;i_vbap-vkaus.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*-----&nbsp;Get&nbsp;the&nbsp;condition&nbsp;no&nbsp;to&nbsp;track&nbsp;the&nbsp;value<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;w_knumv&nbsp;LIKE&nbsp;vbrk-knumv.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbrk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;w_knumv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;knumv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;(w_knumv)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;i_vbrk-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;i_vbrk_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbrk_value-vbeln&nbsp;=&nbsp;i_vbrk-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbrk_value-posnn&nbsp;=&nbsp;i_vbrk-posnn.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbrk_value-knumv&nbsp;=&nbsp;w_knumv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_vbrk_value.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+****&nbsp;&nbsp;SELECT&nbsp;b~werks&nbsp;b~mvgr1&nbsp;b~matnr&nbsp;b~recovery&nbsp;b~bstme&nbsp;b~kbetr<br />
+****&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;i_sd<br />
+****&nbsp;&nbsp;FROM&nbsp;mvke&nbsp;AS&nbsp;&nbsp;a<br />
+****&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;&nbsp;&nbsp;zmil0sd_looseoil&nbsp;AS&nbsp;b<br />
+****&nbsp;&nbsp;ON&nbsp;&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+****&nbsp;&nbsp;WHERE&nbsp;b~matnr&nbsp;IN&nbsp;s_matnr<br />
+****&nbsp;&nbsp;AND&nbsp;b~mvgr1&nbsp;IN&nbsp;s_mvgr1<br />
+****&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~werks&nbsp;IN&nbsp;s_werks.<br />
+****<br />
+****&nbsp;&nbsp;SELECT&nbsp;b~werks&nbsp;b~mvgr1&nbsp;a~matnr&nbsp;b~recovery&nbsp;b~bstme&nbsp;b~kbetr<br />
+****&nbsp;&nbsp;APPENDING&nbsp;TABLE&nbsp;i_sd<br />
+****&nbsp;&nbsp;FROM&nbsp;mvke&nbsp;AS&nbsp;&nbsp;a<br />
+****&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;&nbsp;&nbsp;zmil0sd_looseoil&nbsp;AS&nbsp;b<br />
+****&nbsp;&nbsp;ON&nbsp;&nbsp;a~mvgr1&nbsp;=&nbsp;b~mvgr1<br />
+****&nbsp;&nbsp;WHERE&nbsp;b~matnr&nbsp;IN&nbsp;s_matnr<br />
+****&nbsp;&nbsp;AND&nbsp;b~mvgr1&nbsp;IN&nbsp;s_mvgr1<br />
+****&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~werks&nbsp;IN&nbsp;s_werks<br />
+****&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~mvgr1&nbsp;&nbsp;NE&nbsp;'&nbsp;'.<br />
+<br />
+<br />
+***&nbsp;&nbsp;SELECT&nbsp;matnr&nbsp;umren&nbsp;umrez<br />
+***&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;i_marm<br />
+***&nbsp;&nbsp;FROM&nbsp;&nbsp;marm<br />
+***&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;i_sd<br />
+***&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;i_sd-matnr<br />
+***&nbsp;&nbsp;AND&nbsp;meinh&nbsp;=&nbsp;i_sd-bstme.<br />
+***<br />
+<br />
+*&nbsp;&nbsp;SELECT&nbsp;b~werks&nbsp;b~mvgr1&nbsp;b~matnr&nbsp;b~recovery&nbsp;b~bstme&nbsp;b~kbetr&nbsp;a~umren<br />
+*a~umrez<br />
+*&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;i_sd<br />
+*&nbsp;&nbsp;FROM&nbsp;&nbsp;zmil0sd_looseoil&nbsp;AS&nbsp;&nbsp;b<br />
+*&nbsp;&nbsp;LEFT&nbsp;OUTER&nbsp;JOIN&nbsp;&nbsp;&nbsp;marm&nbsp;AS&nbsp;a<br />
+*&nbsp;&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+**&nbsp;&nbsp;AND&nbsp;a~bstme&nbsp;=&nbsp;b~meinh<br />
+*&nbsp;&nbsp;for&nbsp;all&nbsp;entries&nbsp;in&nbsp;i_mvke<br />
+*&nbsp;&nbsp;WHERE&nbsp;(&nbsp;a~matnr&nbsp;=&nbsp;i_mvke-matnr&nbsp;or<br />
+*&nbsp;&nbsp;&nbsp;a~mvgr1&nbsp;=&nbsp;i_mvke-mvgr1&nbsp;)<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;a~werks&nbsp;IN&nbsp;s_werks.<br />
+<br />
+<br />
+*&nbsp;&nbsp;SELECT&nbsp;b~werks&nbsp;b~mvgr1&nbsp;b~matnr&nbsp;b~recovery&nbsp;b~bstme&nbsp;b~kbetr<br />
+**&nbsp;&nbsp;c~umren&nbsp;c~umrez<br />
+*&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;i_sd<br />
+*&nbsp;&nbsp;FROM&nbsp;&nbsp;mvke&nbsp;AS&nbsp;&nbsp;a<br />
+*&nbsp;&nbsp;left&nbsp;outer&nbsp;join&nbsp;&nbsp;zmil0sd_looseoil&nbsp;AS&nbsp;b<br />
+*&nbsp;&nbsp;ON&nbsp;a~matnr&nbsp;=&nbsp;b~matnr<br />
+**&nbsp;&nbsp;inner&nbsp;&nbsp;join&nbsp;marm&nbsp;as&nbsp;c<br />
+**&nbsp;&nbsp;ON&nbsp;b~matnr&nbsp;=&nbsp;c~matnr<br />
+**&nbsp;&nbsp;AND&nbsp;b~bstme&nbsp;=&nbsp;c~meinh<br />
+*&nbsp;&nbsp;WHERE&nbsp;a~mvgr1&nbsp;IN&nbsp;s_mvgr1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;b~werks&nbsp;IN&nbsp;s_werks.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " SELECT_VBAP<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_REPORT<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+*&nbsp;Code&nbsp;commented&nbsp;by&nbsp;Mandar**********************************************<br />
+*FORM&nbsp;display_report.<br />
+*<br />
+**&nbsp;Sort&nbsp;the&nbsp;i_disp_tab<br />
+*&nbsp;&nbsp;SORT&nbsp;i_vbap_disp&nbsp;BY&nbsp;werks&nbsp;mvgr1&nbsp;vkaus&nbsp;matnr.<br />
+*<br />
+*&nbsp;&nbsp;FORMAT&nbsp;COLOR&nbsp;COL_NORMAL&nbsp;INTENSIFIED&nbsp;OFF.<br />
+*<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_disp_tab.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;WRITE:/&nbsp;v&nbsp;NO-GAP,&nbsp;(4)&nbsp;&nbsp;i_vbap_disp-werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(3)&nbsp;&nbsp;i_vbap_disp-mvgr1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(10)&nbsp;i_vbap_disp-matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(20)&nbsp;i_vbap_disp-arktx&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(3)&nbsp;&nbsp;i_vbap_disp-vkaus&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(20)&nbsp;i_vbap_disp-bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(3)&nbsp;&nbsp;i_vbap_disp-meins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(10)&nbsp;i_vbap_disp-zld_klmeng&nbsp;DECIMALS&nbsp;0&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(10)&nbsp;i_vbap_disp-rv_klmeng&nbsp;&nbsp;DECIMALS&nbsp;0&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(13)&nbsp;i_vbap_disp-zld_cost&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(13)&nbsp;i_vbap_disp-rv_cost&nbsp;&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(10)&nbsp;i_vbap_disp-zld_st&nbsp;DECIMALS&nbsp;3&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP,&nbsp;(10)&nbsp;i_vbap_disp-rv_st&nbsp;DECIMALS&nbsp;3&nbsp;NO-GAP,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v&nbsp;NO-GAP&nbsp;.<br />
+*<br />
+*&nbsp;&nbsp;ENDLOOP.<br />
+*<br />
+*&nbsp;&nbsp;WRITE:/(490)&nbsp;sy-uline.<br />
+*<br />
+*&nbsp;&nbsp;FORMAT&nbsp;COLOR&nbsp;OFF.<br />
+*<br />
+*ENDFORM.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;DISPLAY_REPORT<br />
+************************************************************************<br />
+<br />
+*Code&nbsp;added&nbsp;by&nbsp;Mandar&nbsp;**************************************************<br />
+   </div>
+   <div class="code">
+FORM display_report.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fieldcatalog[]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    "display_report<br />
+   </div>
+   <div class="codeComment">
+************************************************************************<br />
+<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_VALUE_ZLD<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_value_zld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;if&nbsp;i_vbap&nbsp;is&nbsp;initial<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;NOT&nbsp;i_vbap[]&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;the&nbsp;Cost&nbsp;Value&nbsp;'VPRS'&nbsp;and&nbsp;Sales&nbsp;Value&nbsp;'ZPR0'&nbsp;from&nbsp;KONV<br />
+*&nbsp;For&nbsp;ZREF&nbsp;documents<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;knumv&nbsp;kposn&nbsp;kschl&nbsp;kbetr&nbsp;kwert&nbsp;stunr&nbsp;zaehk<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;konv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;&nbsp;prcd_elements"ADDED&nbsp;BY&nbsp;EY_ASH_ABAP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;i_konv_zld<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;i_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbap-knumv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbap-posnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;(&nbsp;kschl&nbsp;=&nbsp;'VPRS'&nbsp;OR&nbsp;kschl&nbsp;=&nbsp;'ZPR0'&nbsp;OR&nbsp;kschl&nbsp;=&nbsp;'YL&D')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;PRIMARY&nbsp;KEY.<br />
+<br />
+<br />
+ENDFORM.                    " SELECT_VALUE_ZLD<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_VALUE_ZSDF<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_value_zsdf.<br />
+<br />
+ENDFORM.                    " SELECT_VALUE_ZSDF<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;WRITE_SELECTION_CRITERIA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM write_selection_criteria.<br />
+<br />
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'User&nbsp;ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;WRITE:25&nbsp;sy-uname.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.<br />
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;sy-datum.<br />
+<br />
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'From&nbsp;Customer&nbsp;Code'.<br />
+&nbsp;&nbsp;WRITE:25&nbsp;s_kunnr-low.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'To&nbsp;Customer&nbsp;Code'.<br />
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;s_kunnr-high.<br />
+<br />
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'From&nbsp;Sale&nbsp;Office'.<br />
+&nbsp;&nbsp;WRITE:25&nbsp;s_vkbur-low.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'To&nbsp;Sale&nbsp;Office'.<br />
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;s_vkbur-high.<br />
+<br />
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'From&nbsp;Period'.<br />
+&nbsp;&nbsp;WRITE:25&nbsp;s_erdat-low.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'To&nbsp;Period'.<br />
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;s_erdat-high.<br />
+<br />
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'From&nbsp;Depot'.<br />
+&nbsp;&nbsp;WRITE:25&nbsp;s_werks-low.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'To&nbsp;Depot'.<br />
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;s_werks-high.<br />
+<br />
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'From&nbsp;Material'.<br />
+   </div>
+   <div class="codeComment">
+*****************SOC&nbsp;ATC&nbsp;on&nbsp;12/7/2024&nbsp;by&nbsp;EY_MAN_ABAP************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;lv_mat.<br />
+&nbsp;&nbsp;lv_mat&nbsp;=&nbsp;|{&nbsp;s_matnr-low&nbsp;ALPHA&nbsp;=&nbsp;OUT&nbsp;}|.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;WRITE:25&nbsp;s_matnr-low.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;WRITE:25&nbsp;lv_mat.<br />
+   </div>
+   <div class="codeComment">
+*****************EOC&nbsp;ATC&nbsp;on&nbsp;12/7/2024&nbsp;by&nbsp;EY_MAN_ABAP************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'To&nbsp;Material'.<br />
+   </div>
+   <div class="codeComment">
+*****************SOC&nbsp;ATC&nbsp;on&nbsp;12/7/2024&nbsp;by&nbsp;EY_MAN_ABAP************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CLEAR&nbsp;lv_mat.<br />
+&nbsp;&nbsp;lv_mat&nbsp;=&nbsp;|{&nbsp;s_matnr-high&nbsp;ALPHA&nbsp;=&nbsp;OUT&nbsp;}|.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;s_matnr-high.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;lv_mat.<br />
+   </div>
+   <div class="codeComment">
+*****************EOC&nbsp;ATC&nbsp;on&nbsp;12/7/2024&nbsp;by&nbsp;EY_MAN_ABAP************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;WRITE:/4&nbsp;&nbsp;'From&nbsp;Material&nbsp;Group1'.<br />
+&nbsp;&nbsp;WRITE:25&nbsp;s_mvgr1-low.<br />
+<br />
+&nbsp;&nbsp;WRITE:&nbsp;60&nbsp;'To&nbsp;Material&nbsp;Group1'.<br />
+&nbsp;&nbsp;WRITE:&nbsp;80&nbsp;s_mvgr1-high.<br />
+&nbsp;&nbsp;ULINE.<br />
+<br />
+ENDFORM.                    " WRITE_SELECTION_CRITERIA<br />
+<br />
+TOP-OF-PAGE.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BUILD_DISPLAY_TAB<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM build_display_tab.<br />
+&nbsp;&nbsp;SORT&nbsp;i_vbap_disp&nbsp;BY&nbsp;werks&nbsp;mvgr1&nbsp;matnr&nbsp;arktx&nbsp;vkaus&nbsp;bezei&nbsp;meins<br />
+&nbsp;&nbsp;vbeln&nbsp;posnr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*******************************************************************************************&nbsp;Added&nbsp;By&nbsp;EY:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;08.01.2025<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_vbap&nbsp;INTO&nbsp;DATA(wa_werks).<br />
+&nbsp;&nbsp;IF&nbsp;wa_werks-werks&nbsp;=&nbsp;'DB27'&nbsp;OR&nbsp;wa_werks-werks&nbsp;=&nbsp;'DBBC'&nbsp;OR&nbsp;wa_werks-werks&nbsp;=&nbsp;'DBBA'&nbsp;OR&nbsp;wa_werks-werks&nbsp;=&nbsp;'DBBE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;vbelv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erdat,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erzet,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbtyp_n<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbfa<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;TABLE&nbsp;@it_vbfa_t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;@i_vbap<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbelv&nbsp;=&nbsp;@i_vbap-vbeln.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SORT&nbsp;it_vbfa_t&nbsp;DESCENDING&nbsp;&nbsp;BY&nbsp;vbelv&nbsp;erdat&nbsp;erzet.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;it_vbfa_t&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;fs_vbfa_t&gt;).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AT&nbsp;NEW&nbsp;vbelv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_vbfa-vbelv&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_vbfa_t&gt;-vbelv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_vbfa-erdat&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_vbfa_t&gt;-erdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_vbfa-erzet&nbsp;&nbsp;&nbsp;=&nbsp;&lt;fs_vbfa_t&gt;-erzet.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wa_vbfa-vbtyp_n&nbsp;=&nbsp;&lt;fs_vbfa_t&gt;-vbtyp_n.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;wa_vbfa&nbsp;TO&nbsp;it_vbfa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDAT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_vbfa.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*******************************************************************************************&nbsp;Added&nbsp;By&nbsp;EY:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;08.01.2025<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbap.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*******************************************************************************************&nbsp;Added&nbsp;By&nbsp;EY:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;08.01.2025<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-werks&nbsp;=&nbsp;'DB27'&nbsp;OR&nbsp;i_vbap-werks&nbsp;=&nbsp;'DBBC'&nbsp;OR&nbsp;i_vbap-werks&nbsp;=&nbsp;'DBBA'&nbsp;OR&nbsp;i_vbap-werks&nbsp;=&nbsp;'DBBE'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbfa&nbsp;INTO&nbsp;DATA(wa_vbfa1)&nbsp;WITH&nbsp;KEY&nbsp;vbelv&nbsp;=&nbsp;&nbsp;i_vbap-vbeln.&nbsp;"&nbsp;&nbsp;"&nbsp;i_vbrk-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_vbfa1-vbtyp_n&nbsp;=&nbsp;'S'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;abgru&nbsp;FROM&nbsp;vbap&nbsp;INTO&nbsp;@DATA(lv_abgru)&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;@i_vbap-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;lv_abgru&nbsp;IS&nbsp;NOT&nbsp;INITIAL.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;lv_abgru.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONTINUE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*******************************************************************************************&nbsp;Added&nbsp;By&nbsp;EY:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;08.01.2025<br />
+***********Ashish<br />
+*&nbsp;to&nbsp;fetch&nbsp;the&nbsp;customer&nbsp;group1&nbsp;and&nbsp;customer&nbsp;group&nbsp;2<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;i_vbap_disp-kvgr1,&nbsp;i_vbap_disp-kvgr2&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;kvgr1&nbsp;kvgr2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;(i_vbap_disp-kvgr1,&nbsp;i_vbap_disp-kvgr2&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;knvv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;kunnr&nbsp;=&nbsp;i_vbap-kunnr.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***********Ashish<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bezei&nbsp;FROM&nbsp;tvv1t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;i_vbap_disp-bezei1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;kvgr1&nbsp;=&nbsp;i_vbap_disp-kvgr1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'E'.&nbsp;"&nbsp;'EN'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bezei&nbsp;FROM&nbsp;tvv2t<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;i_vbap_disp-bezei2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;kvgr2&nbsp;=&nbsp;i_vbap_disp-kvgr2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;spras&nbsp;=&nbsp;'E'.&nbsp;"&nbsp;'EN'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;i_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-werks&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-werks.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-mvgr1&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-mvgr1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-matnr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-charg&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-charg.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-arktx&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-arktx.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-vkaus&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-vkaus.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-bezei&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-bezei.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-vbeln&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-posnr&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-meins&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap-meins.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-bstdk_e&nbsp;&nbsp;=&nbsp;i_vbap-bstdk_e.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_klmeng&nbsp;=&nbsp;i_vbap_disp-zld_klmeng&nbsp;+&nbsp;i_vbap-klmeng.<br />
+<br />
+   </div>
+   <div class="codeComment">
+***-----&nbsp;ZREF&nbsp;in&nbsp;ST&nbsp;unit<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_st&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;i_vbap-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;i_st-umrez&nbsp;NE&nbsp;0&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_st&nbsp;=&nbsp;i_vbap_disp-zld_st&nbsp;+&nbsp;(&nbsp;i_vbap-klmeng&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_st-umren&nbsp;/&nbsp;i_st-umrez&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Add&nbsp;the&nbsp;RV&nbsp;documents<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbrk&nbsp;WHERE&nbsp;vbelv&nbsp;=&nbsp;i_vbap-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;posnv&nbsp;=&nbsp;i_vbap-posnr.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Code&nbsp;by&nbsp;Mandar*******<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_konv_rv&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbrk-knumv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbrk-posnv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-auart&nbsp;=&nbsp;'ZL&D'&nbsp;AND&nbsp;(&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'VPRS'&nbsp;OR&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'ZPR0'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_cost&nbsp;=&nbsp;i_vbap_disp-rv_cost&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_rv-kbetr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_sales&nbsp;=&nbsp;i_vbap_disp-rv_sales&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;i_vbap-klmeng&nbsp;*&nbsp;i_konv_rv-kbetr&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-auart&nbsp;=&nbsp;'ZLD1'&nbsp;AND&nbsp;(&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'ZPR0'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_cost&nbsp;=&nbsp;i_vbap_disp-rv_cost&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_rv-kbetr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_sales&nbsp;=&nbsp;i_vbap_disp-rv_sales&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;i_vbap-klmeng&nbsp;*&nbsp;i_konv_rv-kbetr&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-auart&nbsp;=&nbsp;'ZBLD'&nbsp;AND&nbsp;&nbsp;(&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'YL&D'&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_cost&nbsp;=&nbsp;i_vbap_disp-rv_cost&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_rv-kbetr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_sales&nbsp;=&nbsp;i_vbap_disp-rv_sales&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;i_vbap-klmeng&nbsp;*&nbsp;i_konv_rv-kbetr&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+   </div>
+   <div class="codeComment">
+*******************************************************************************************&nbsp;Added&nbsp;By&nbsp;EY:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;08.01.2025<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:wa_vbfa1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-werks&nbsp;=&nbsp;'DB27'&nbsp;OR&nbsp;i_vbap-werks&nbsp;=&nbsp;'DBBC'&nbsp;OR&nbsp;i_vbap-werks&nbsp;=&nbsp;'DBBA'&nbsp;OR&nbsp;i_vbap-werks&nbsp;=&nbsp;'DBBE'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;it_vbfa&nbsp;INTO&nbsp;wa_vbfa1&nbsp;WITH&nbsp;KEY&nbsp;vbelv&nbsp;=&nbsp;&nbsp;i_vbap-vbeln.&nbsp;"&nbsp;&nbsp;"&nbsp;i_vbrk-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;wa_vbfa1-vbtyp_n&nbsp;&lt;&gt;&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_vbeln&nbsp;&nbsp;=&nbsp;i_vbrk-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;v_rvdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;fkdat&nbsp;INTO&nbsp;v_rvdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;i_vbrk-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rvdate&nbsp;=&nbsp;v_rvdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_credt&nbsp;&nbsp;=&nbsp;i_vbrk-erdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_klmeng&nbsp;=&nbsp;i_vbap_disp-rv_klmeng&nbsp;+&nbsp;i_vbrk-rfmng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;i_st-umrez&nbsp;NE&nbsp;0&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_st&nbsp;=&nbsp;i_vbap_disp-rv_st&nbsp;+&nbsp;(&nbsp;i_vbrk-rfmng&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_st-umren&nbsp;/&nbsp;i_st-umrez&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;wa_vbfa1-vbtyp_n&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_cost&nbsp;=&nbsp;&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_sales&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_credt&nbsp;&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_klmeng&nbsp;=&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;wa_vbfa1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_vbeln&nbsp;&nbsp;=&nbsp;i_vbrk-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;v_rvdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;fkdat&nbsp;INTO&nbsp;v_rvdate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbrk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;i_vbrk-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rvdate&nbsp;=&nbsp;v_rvdate.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_credt&nbsp;&nbsp;=&nbsp;i_vbrk-erdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_klmeng&nbsp;=&nbsp;i_vbap_disp-rv_klmeng&nbsp;+&nbsp;i_vbrk-rfmng.<br />
+   </div>
+   <div class="codeComment">
+***-----&nbsp;ZSDF&nbsp;in&nbsp;ST&nbsp;unit<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;i_st-umrez&nbsp;NE&nbsp;0&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_st&nbsp;=&nbsp;i_vbap_disp-rv_st&nbsp;+&nbsp;(&nbsp;i_vbrk-rfmng&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_st-umren&nbsp;/&nbsp;i_st-umrez&nbsp;).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_credt&nbsp;&nbsp;=&nbsp;i_vbrk-erdat.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_klmeng&nbsp;=&nbsp;i_vbap_disp-rv_klmeng&nbsp;+&nbsp;i_vbrk-rfmng.<br />
+*******************************************************************************************&nbsp;Added&nbsp;By&nbsp;EY:&nbsp;Amit&nbsp;Pol&nbsp;on&nbsp;08.01.2025<br />
+************************************************************<br />
+****-----&nbsp;ZSDF&nbsp;in&nbsp;ST&nbsp;unit<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;i_st-umrez&nbsp;NE&nbsp;0&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_st&nbsp;=&nbsp;i_vbap_disp-rv_st&nbsp;+&nbsp;(&nbsp;i_vbrk-rfmng&nbsp;*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_st-umren&nbsp;/&nbsp;i_st-umrez&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Code&nbsp;commented&nbsp;by&nbsp;Mandar**********************************************<br />
+**&nbsp;Add&nbsp;the&nbsp;Cost&nbsp;value&nbsp;&&nbsp;Sales&nbsp;Value&nbsp;for&nbsp;ZSDF&nbsp;documents<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_konv_zld&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbap-knumv<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbap-posnr.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_zld-kschl&nbsp;=&nbsp;'VPRS'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_cost&nbsp;=&nbsp;i_vbap_disp-zld_cost&nbsp;+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kwert.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_konv_zld-kschl&nbsp;=&nbsp;'ZPR0'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_sales&nbsp;=&nbsp;i_vbap_disp-zld_sales&nbsp;+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kwert.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_konv_rv&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbap-knumv<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbap-posnr.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'VPRS'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_cost&nbsp;=&nbsp;i_vbap_disp-rv_cost&nbsp;+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_rv-kwert.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'ZPR0'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_sales&nbsp;=&nbsp;i_vbap_disp-rv_sales&nbsp;+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;i_vbap-klmeng&nbsp;*&nbsp;i_konv_rv-kbetr&nbsp;).<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+************************************************************************<br />
+*&nbsp;Code&nbsp;Modified&nbsp;by&nbsp;Mandar***********************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_konv_zld&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbap-knumv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbap-posnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-auart&nbsp;=&nbsp;'ZL&D'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_zld-kschl&nbsp;=&nbsp;'VPRS'&nbsp;OR&nbsp;i_konv_zld-kschl&nbsp;=&nbsp;'ZPR0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_cost&nbsp;=&nbsp;i_vbap_disp-zld_cost&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kbetr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_sales&nbsp;=&nbsp;i_vbap_disp-zld_sales&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kwert.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-auart&nbsp;=&nbsp;'ZLD1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_zld-kschl&nbsp;=&nbsp;'ZPR0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_cost&nbsp;=&nbsp;i_vbap_disp-zld_cost&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kbetr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_sales&nbsp;=&nbsp;i_vbap_disp-zld_sales&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kwert.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_vbap-auart&nbsp;=&nbsp;'ZBLD'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_zld-kschl&nbsp;=&nbsp;'YL&D'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_cost&nbsp;=&nbsp;i_vbap_disp-zld_cost&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kbetr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-zld_sales&nbsp;=&nbsp;i_vbap_disp-zld_sales&nbsp;+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zld-kwert.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_konv_rv&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbap-knumv<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbap-posnr.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'VPRS'&nbsp;or&nbsp;i_konv_rv-kschl&nbsp;=&nbsp;'ZPR0'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_cost&nbsp;=&nbsp;i_vbap_disp-rv_cost&nbsp;+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_rv-kbetr.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_sales&nbsp;=&nbsp;i_vbap_disp-rv_sales&nbsp;+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;i_vbap-klmeng&nbsp;*&nbsp;i_konv_rv-kbetr&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+************************************************************************<br />
+<br />
+<br />
+*&nbsp;Add&nbsp;the&nbsp;Cost&nbsp;value&nbsp;&&nbsp;Sales&nbsp;Value&nbsp;for&nbsp;ZRE&nbsp;documents<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_konv_zre&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbap_zre-knumv<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbap_zre-posnr.<br />
+**<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;i_konv_zre-kschl&nbsp;=&nbsp;'VPRS'.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_disp_tab-cost_zre&nbsp;=&nbsp;i_disp_tab-cost_zre&nbsp;+<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zre-kwert.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_konv_zre-kschl&nbsp;=&nbsp;'ZPAI'.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_disp_tab-sales_zre&nbsp;=&nbsp;i_disp_tab-sales_zre&nbsp;+<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_konv_zre-kwert.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+**<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+*&nbsp;Total&nbsp;sales&nbsp;and&nbsp;billing&nbsp;data<br />
+<br />
+*******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp<br />
+*******<br />
+*******&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;&nbsp;i_disp_tab.<br />
+<br />
+*&nbsp;Code&nbsp;added&nbsp;by&nbsp;Mandar********************************************<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;v_skudesc,v_brand.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-erdat&nbsp;=&nbsp;i_vbap-erdat.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-vkbur&nbsp;&nbsp;=&nbsp;i_vbap-vkbur.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-kunnr&nbsp;&nbsp;=&nbsp;i_vbap-kunnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-knumv&nbsp;&nbsp;=&nbsp;i_vbap-knumv.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-kname1&nbsp;=&nbsp;i_vbap-name1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;i_vbap_disp-wname1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;name1&nbsp;INTO&nbsp;(i_vbap_disp-wname1&nbsp;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;i_vbap-werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;maktx&nbsp;FROM&nbsp;makt&nbsp;INTO&nbsp;v_skudesc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;i_vbap-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-maktx&nbsp;=&nbsp;v_skudesc.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;matkl&nbsp;FROM&nbsp;mara&nbsp;INTO&nbsp;v_brand<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;matnr&nbsp;=&nbsp;i_vbap-matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-matkl&nbsp;=&nbsp;v_brand.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap-werks+1(1)&nbsp;=&nbsp;'1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-spart&nbsp;=&nbsp;'10'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_vbap-werks+1(1)&nbsp;=&nbsp;'2'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-spart&nbsp;=&nbsp;'20'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_vbap-werks+1(1)&nbsp;=&nbsp;'3'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-spart&nbsp;=&nbsp;'30'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_vbap-werks+1(1)&nbsp;=&nbsp;'4'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-spart&nbsp;=&nbsp;'40'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_vbap-werks+1(1)&nbsp;=&nbsp;'5'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-spart&nbsp;=&nbsp;'50'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ELSEIF&nbsp;i_vbap-werks+1(1)&nbsp;=&nbsp;'6'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-spart&nbsp;=&nbsp;'55'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"Added&nbsp;by&nbsp;Prasa&nbsp;Gurjar.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;DATA&nbsp;:&nbsp;v_date(10)&nbsp;TYPE&nbsp;c."vbkd-bstdk.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;vbkd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;i_vbkd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;i_vbap-vbeln.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;posnr&nbsp;&nbsp;=&nbsp;i_vbap-posnr.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbkd.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'CONVERSION_EXIT_PDATE_OUTPUT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;&nbsp;=&nbsp;i_vbkd-bstdk<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output&nbsp;=&nbsp;v_date.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;i_vbkd-vbeln&nbsp;TO&nbsp;i_vbap_disp-vbeln.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;i_vbkd-bstkd&nbsp;TO&nbsp;i_vbap_disp-bstkd.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOVE&nbsp;v_date&nbsp;TO&nbsp;i_vbap_disp-bstdk.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-month&nbsp;=&nbsp;i_vbap_disp-erdat+4(2).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-clm&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp-rvdate+4(2).<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"Till&nbsp;here.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;i_vbap_disp.<br />
+   </div>
+   <div class="codeComment">
+******************************************************************<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;i_vbap_disp.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="codeComment">
+******&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_disp_tab.<br />
+*******For&nbsp;loose&nbsp;oil&nbsp;recovery<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;i_sd,&nbsp;i_marm.<br />
+******<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_sd&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;i_disp_tab-werks<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mvgr1&nbsp;=&nbsp;i_disp_tab-mvgr1<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;=&nbsp;i_disp_tab-matnr.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;(&nbsp;sy-subrc&nbsp;EQ&nbsp;0&nbsp;)&nbsp;.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_marm&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;i_sd-matnr.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;ELSE.<br />
+******<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;:&nbsp;i_sd,&nbsp;i_marm.<br />
+******<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_sd&nbsp;WITH&nbsp;KEY&nbsp;werks&nbsp;=&nbsp;i_disp_tab-werks<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;=&nbsp;i_disp_tab-matnr.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;i_marm&nbsp;WITH&nbsp;KEY&nbsp;matnr&nbsp;=&nbsp;i_sd-matnr.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+******<br />
+*******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;i_disp_tab-qty_rec&nbsp;=&nbsp;i_disp_tab-qty_zsdf&nbsp;*<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;i_marm-umren&nbsp;/&nbsp;i_marm-umrez&nbsp;)<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;(&nbsp;i_sd-recovery&nbsp;/&nbsp;100&nbsp;).<br />
+******<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;i_disp_tab-uom_rec&nbsp;=&nbsp;i_sd-bstme.<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;i_disp_tab-val_rec&nbsp;=&nbsp;i_disp_tab-qty_rec&nbsp;&nbsp;*&nbsp;i_sd-kbetr.<br />
+******<br />
+******&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_disp_tab.<br />
+******<br />
+******&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " BUILD_DISPLAY_TAB<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_QTY_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_qty_data.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;records&nbsp;from&nbsp;VBAP&nbsp;for&nbsp;Doc.&nbsp;Type&nbsp;'ZREF'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_vbap_zld.<br />
+<br />
+ENDFORM.                    " SELECT_QTY_DATA<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_COST_SALES_VALUE<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_cost_sales_value.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;value&nbsp;at&nbsp;cost&nbsp;and&nbsp;sales&nbsp;value&nbsp;from&nbsp;KONV&nbsp;for&nbsp;'ZREF'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_value_zld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;value&nbsp;at&nbsp;cost&nbsp;and&nbsp;sales&nbsp;value&nbsp;from&nbsp;KONV&nbsp;for&nbsp;'ZRE'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_value_rv.<br />
+<br />
+ENDFORM.                    " SELECT_COST_SALES_VALUE<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_DETAILED_REPORT<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_detailed_report.<br />
+<br />
+<br />
+ENDFORM.                    " DISPLAY_DETAILED_REPORT<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;DISPLAY_DETAILED_REPORT_TOTAL<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_detailed_report_total.<br />
+<br />
+ENDFORM.                    " DISPLAY_DETAILED_REPORT_TOTAL<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;WRITE_DETAILED_HEADING<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM write_detailed_heading.<br />
+<br />
+&nbsp;&nbsp;FORMAT&nbsp;COLOR&nbsp;COL_HEADING.<br />
+&nbsp;&nbsp;WRITE&nbsp;:/&nbsp;sy-uline(255).<br />
+<br />
+ENDFORM.                    " WRITE_DETAILED_HEADING<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_VALUE_DATA<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_value_data.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;value&nbsp;at&nbsp;cost&nbsp;and&nbsp;sales&nbsp;value&nbsp;from&nbsp;KONV&nbsp;for&nbsp;'ZREF'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_value_zld.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;value&nbsp;at&nbsp;cost&nbsp;and&nbsp;sales&nbsp;value&nbsp;from&nbsp;KONV&nbsp;for&nbsp;'ZRE'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;select_value_rv.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*****&nbsp;Select&nbsp;value&nbsp;at&nbsp;cost&nbsp;and&nbsp;sales&nbsp;value&nbsp;from&nbsp;KONV&nbsp;for&nbsp;'ZSDF'<br />
+****&nbsp;&nbsp;PERFORM&nbsp;select_value_zsdf.<br />
+****<br />
+   </div>
+   <div class="code">
+ENDFORM.                    " SELECT_VALUE_DATA<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;SELECT_VALUE_RV<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM select_value_rv.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Check&nbsp;if&nbsp;i_vbap&nbsp;is&nbsp;initial<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CHECK&nbsp;NOT&nbsp;i_vbrk_value[]&nbsp;IS&nbsp;INITIAL.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Select&nbsp;the&nbsp;Cost&nbsp;Value&nbsp;'VPRS'&nbsp;and&nbsp;Sales&nbsp;Value&nbsp;'ZPR0'&nbsp;from&nbsp;KONV<br />
+*&nbsp;For&nbsp;ZREF&nbsp;documents<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;SELECT&nbsp;knumv&nbsp;kposn&nbsp;kschl&nbsp;kbetr&nbsp;kwert&nbsp;stunr&nbsp;zaehk<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;konv<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;prcd_Elements&nbsp;&nbsp;"ADDED&nbsp;BY&nbsp;EY_ASH_ABAP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;i_konv_rv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOR&nbsp;ALL&nbsp;ENTRIES&nbsp;IN&nbsp;i_vbrk_value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;knumv&nbsp;=&nbsp;i_vbrk_value-knumv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;kposn&nbsp;=&nbsp;i_vbrk_value-posnn<br />
+&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;&nbsp;&nbsp;(&nbsp;kschl&nbsp;=&nbsp;'VPRS'&nbsp;OR&nbsp;kschl&nbsp;=&nbsp;'ZPR0'&nbsp;OR&nbsp;kschl&nbsp;=&nbsp;'YL&D')<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ORDER&nbsp;BY&nbsp;PRIMARY&nbsp;KEY.<br />
+<br />
+<br />
+<br />
+ENDFORM.                    " SELECT_VALUE_RV<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;summary_data<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM summary_data.<br />
+&nbsp;&nbsp;CLEAR&nbsp;itab.<br />
+&nbsp;&nbsp;REFRESH&nbsp;itab.<br />
+<br />
+&nbsp;&nbsp;i_vbap_disp1[]&nbsp;=&nbsp;i_vbap_disp[].<br />
+&nbsp;&nbsp;SORT&nbsp;i_vbap_disp1&nbsp;BY&nbsp;vbeln&nbsp;matnr.<br />
+&nbsp;&nbsp;DELETE&nbsp;ADJACENT&nbsp;DUPLICATES&nbsp;FROM&nbsp;i_vbap_disp1&nbsp;COMPARING&nbsp;vbeln&nbsp;matnr.<br />
+<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbap_disp1.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;i_vbap_disp1-zld_st,i_vbap_disp1-zld_klmeng,i_vbap_disp1-zld_cost,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-zld_sales,i_vbap_disp1-rv_st,i_vbap_disp1-rv_klmeng,i_vbap_disp1-rv_cost,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-rv_sales.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbap_disp&nbsp;WHERE&nbsp;vbeln&nbsp;=&nbsp;i_vbap_disp1-vbeln&nbsp;AND&nbsp;matnr&nbsp;=&nbsp;i_vbap_disp1-matnr.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-zld_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp1-zld_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;i_vbap_disp-zld_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-zld_klmeng&nbsp;=&nbsp;i_vbap_disp1-zld_klmeng&nbsp;+&nbsp;i_vbap_disp-zld_klmeng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-zld_cost&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp1-zld_cost&nbsp;&nbsp;&nbsp;+&nbsp;i_vbap_disp-zld_cost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-zld_sales&nbsp;&nbsp;=&nbsp;i_vbap_disp1-zld_sales&nbsp;&nbsp;+&nbsp;i_vbap_disp-zld_sales.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-rv_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp1-rv_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;i_vbap_disp-rv_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-rv_klmeng&nbsp;&nbsp;=&nbsp;i_vbap_disp1-rv_klmeng&nbsp;&nbsp;+&nbsp;i_vbap_disp-rv_klmeng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-rv_cost&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp1-rv_cost&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;i_vbap_disp-rv_cost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp1-rv_sales&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp1-rv_sales&nbsp;&nbsp;&nbsp;+&nbsp;i_vbap_disp-rv_sales.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MODIFY&nbsp;i_vbap_disp1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MOVE-CORRESPONDING&nbsp;i_vbap_disp1&nbsp;TO&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;itab.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+ENDFORM.                    "summary_data<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;summary_details<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM summary_details.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'.<br />
+*&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Date'.<br />
+*&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+*&nbsp;&nbsp;append&nbsp;fieldcatalog&nbsp;to&nbsp;fieldcatalog.<br />
+*&nbsp;&nbsp;clear&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+*&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'REPID'.<br />
+*&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Source'.<br />
+*&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+*&nbsp;&nbsp;append&nbsp;fieldcatalog&nbsp;to&nbsp;fieldcatalog.<br />
+*&nbsp;&nbsp;clear&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'WERKS'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Depot'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'WNAME1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Depot&nbsp;Name'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'SPART'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Reg'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'VKBUR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Sales&nbsp;Office'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MVGR1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Mat&nbsp;Gr'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MATKL'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Brand'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BEZEI'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Reason'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KUNNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;fieldcatalog-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KVGR1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer&nbsp;Grp1'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BEZEI1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Cust&nbsp;Grp1&nbsp;Desc'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KVGR2'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer&nbsp;Grp2'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BEZEI2'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Cust&nbsp;Grp2&nbsp;Desc'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;12.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KNAME1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Cust&nbsp;Name'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;13.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'SKU'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;14.<br />
+&nbsp;&nbsp;fieldcatalog-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MAKTX'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'SKU&nbsp;Desc'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_ST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;in&nbsp;ST'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;16.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_KLMENG'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Qty(Nos)'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;17.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_COST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;Zpro/Unit'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;18.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_SALES'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;Value'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;19.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_ST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;in&nbsp;ST'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_KLMENG'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Qty(Nos)'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;21.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_COST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;Rate'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;22.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_SALES'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;Values'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;23.<br />
+&nbsp;&nbsp;fieldcatalog-just&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'L'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;=&nbsp;sy-repid<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;&nbsp;=&nbsp;'TOP-OF-PAGE'&nbsp;"see&nbsp;Form&nbsp;Topofpage<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;=&nbsp;'USER_COMMAND'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_grid_title&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;outtext<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gd_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;fieldcatalog[]<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_special_groups&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_events<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_print&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_save&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'A'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_variant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;itab<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;program_error&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;MESSAGE&nbsp;ID&nbsp;SY-MSGID&nbsp;TYPE&nbsp;SY-MSGTY&nbsp;NUMBER&nbsp;SY-MSGNO<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;SY-MSGV1&nbsp;SY-MSGV2&nbsp;SY-MSGV3&nbsp;SY-MSGV4.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+ENDFORM.                    "summary_details<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;display_detail_heading<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_detail_heading.<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'WERKS'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Depot'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'WNAME1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Depot&nbsp;Name'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'SPART'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Region&nbsp;Code'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;3.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'VKBUR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Sales&nbsp;Office'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MVGR1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Mat&nbsp;Group'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;5.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MATKL'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Brand'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;6.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BEZEI'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Reason'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;7.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'VBELN'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;No'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;8.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'POSNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&t&nbsp;It'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;9.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KUNNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;10.<br />
+&nbsp;&nbsp;fieldcatalog-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KVGR1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer&nbsp;Grp1'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;11.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BEZEI1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Cust&nbsp;Grp1&nbsp;Desc'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;12.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KVGR2'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer&nbsp;Grp2'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;13.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BEZEI2'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Cust&nbsp;Grp2&nbsp;Desc'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;14.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'KNAME1'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Customer&nbsp;Name'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'SKU'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;16.<br />
+&nbsp;&nbsp;fieldcatalog-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MAKTX'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'SKU&nbsp;Desc'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;17.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ERDAT'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Date'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;18.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'MONTH'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Month'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;19.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ERDAT1'.<br />
+*&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Mth'.<br />
+*&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;15.<br />
+*&nbsp;&nbsp;append&nbsp;fieldcatalog&nbsp;to&nbsp;fieldcatalog.<br />
+*&nbsp;&nbsp;clear&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_ST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;ST'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;20.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_KLMENG'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Q.No'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;21.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_COST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'zpro/ut'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;22.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'ZLD_SALES'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zl&d&nbsp;Val'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;23.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'CLM'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Clm'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;24.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_VBELN'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;No'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;25.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RVDATE'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;Date'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;26.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_ST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Zd(ST)'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;27.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_KLMENG'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Q(No)'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;28.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_COST'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;Rate'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;29.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_SALES'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;Val'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;30.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'RV_CREDT'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'RV&nbsp;IDt'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;31.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BSTDK_E'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Adt.Dt'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;32.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BSTKD'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'PO&nbsp;Number'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;33.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'BSTDK'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'PO&nbsp;Date'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;34.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Added&nbsp;on&nbsp;01.03.2016&nbsp;by&nbsp;eBorn&nbsp;--------------------------<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;fieldcatalog-fieldname&nbsp;&nbsp;&nbsp;=&nbsp;'CHARG'.<br />
+&nbsp;&nbsp;fieldcatalog-seltext_m&nbsp;&nbsp;&nbsp;=&nbsp;'Batch&nbsp;Number'.<br />
+&nbsp;&nbsp;fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;35.<br />
+&nbsp;&nbsp;fieldcatalog-no_zero&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;APPEND&nbsp;fieldcatalog&nbsp;TO&nbsp;fieldcatalog.<br />
+&nbsp;&nbsp;CLEAR&nbsp;&nbsp;fieldcatalog.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;End&nbsp;of&nbsp;01.03.2016&nbsp;------------------------------<br />
+<br />
+   </div>
+   <div class="code">
+ENDFORM.                    "display_detail_heading<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;FOREGROUND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM foreground .<br />
+<br />
+&nbsp;&nbsp;DATA:&nbsp;ld_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;15,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_klmeng&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;15,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_cost&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;13,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_sales&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;13,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;15,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_klmeng&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;15,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_cost&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;13,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_sales&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;13,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rvdate1&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bstdate&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;da2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;da1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;c&nbsp;LENGTH&nbsp;10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_bwkey&nbsp;&nbsp;&nbsp;LIKE&nbsp;t001w-bwkey,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cocode&nbsp;&nbsp;&nbsp;&nbsp;LIKE&nbsp;t001k-bukrs.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;summary&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;&nbsp;'Date'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Company&nbsp;Code'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Material'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Material&nbsp;Group'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Depot'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Sales&nbsp;Office'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Customer'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Reason'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;No'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Qty&nbsp;in&nbsp;Nos'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;Value'<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Depot&nbsp;Name'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Reg'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Mat&nbsp;Gr'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Cust&nbsp;Name'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SKU&nbsp;Desc'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;in&nbsp;ST'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;ZPRO/Unit'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;in&nbsp;ST'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Qty(Nos)'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;Rate'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;Values'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;it_line&nbsp;SEPARATED&nbsp;BY&nbsp;s_del.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_line.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_st&nbsp;=&nbsp;itab-zld_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_klmeng&nbsp;=&nbsp;itab-zld_klmeng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_cost&nbsp;&nbsp;=&nbsp;itab-zld_cost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_sales&nbsp;=&nbsp;itab-zld_sales.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_st&nbsp;&nbsp;=&nbsp;itab-rv_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_klmeng&nbsp;=&nbsp;itab-rv_klmeng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_cost&nbsp;&nbsp;&nbsp;=&nbsp;itab-rv_cost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_sales&nbsp;&nbsp;=&nbsp;&nbsp;itab-rv_sales.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHIFT&nbsp;itab-matnr&nbsp;LEFT&nbsp;DELETING&nbsp;LEADING&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;itab-matnr&nbsp;NO-GAPS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHIFT&nbsp;itab-kunnr&nbsp;LEFT&nbsp;DELETING&nbsp;LEADING'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;itab-kunnr&nbsp;NO-GAPS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;','&nbsp;IN&nbsp;itab-bezei&nbsp;WITH&nbsp;'-'.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;to&nbsp;fetch&nbsp;company&nbsp;code<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bwkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;i_bwkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;itab-werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;cocode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bwkey&nbsp;=&nbsp;i_bwkey.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;itab-erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cocode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-matkl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-vkbur<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-bezei<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_klmeng<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_sales<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-wname1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-spart<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-mvgr1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-kname1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itab-maktx<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"itab-zld_st<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"itab-zld_cost<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_st&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"itab-rv_st<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_klmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"itab-rv_klmeng<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_cost&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"itab-rv_cost<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_sales&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"itab-rv_sales<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;it_line&nbsp;SEPARATED&nbsp;BY&nbsp;s_del.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_line.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR&nbsp;itab.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;detail&nbsp;=&nbsp;'X'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;&nbsp;'Date'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Company&nbsp;Code'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Material'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Material&nbsp;Group'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Depot'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Sales&nbsp;Office'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Customer'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Reason'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;No'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Qty&nbsp;in&nbsp;Nos'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;Value'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;Date'&nbsp;&nbsp;"++&nbsp;by&nbsp;Asif&nbsp;17.03.2018<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Depot&nbsp;Name'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Region&nbsp;Code'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Mat&nbsp;Group'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&T&nbsp;IT'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Cust&nbsp;Name'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'SKU&nbsp;Desc'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Month'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZL&D&nbsp;ST'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Clm'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;No'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZPro/Unit'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;Date'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'ZD(ST)'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Qty(Nos)'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;Rate'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;Val'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'RV&nbsp;IDt'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Adt&nbsp;Dt'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'PO&nbsp;Number'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'PO&nbsp;Date'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;it_line&nbsp;SEPARATED&nbsp;BY&nbsp;s_del.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_line.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;i_vbap_disp.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_st&nbsp;=&nbsp;i_vbap_disp-zld_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_klmeng&nbsp;=&nbsp;i_vbap_disp-zld_klmeng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_cost&nbsp;&nbsp;=&nbsp;i_vbap_disp-zld_cost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_sales&nbsp;=&nbsp;i_vbap_disp-zld_sales.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_st&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;i_vbap_disp-rv_st.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_klmeng&nbsp;=&nbsp;i_vbap_disp-rv_klmeng.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_cost&nbsp;&nbsp;=&nbsp;i_vbap_disp-rv_cost.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rv_sales&nbsp;&nbsp;=&nbsp;i_vbap_disp-rv_sales.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;','&nbsp;IN&nbsp;i_vbap_disp-bstkd&nbsp;WITH&nbsp;';'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;i_vbap_disp-rvdate+0(4)&nbsp;i_vbap_disp-rvdate+4(2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rvdate+6(2)&nbsp;INTO&nbsp;rvdate1&nbsp;SEPARATED&nbsp;BY&nbsp;'-'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;i_vbap_disp-rv_credt+0(4)&nbsp;i_vbap_disp-rv_credt+4(2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-rv_credt+6(2)&nbsp;INTO&nbsp;bstdate&nbsp;SEPARATED&nbsp;BY&nbsp;'-'.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;i_vbap_disp-erdat+0(4)&nbsp;i_vbap_disp-erdat+4(2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-erdat+6(2)&nbsp;INTO&nbsp;da1&nbsp;SEPARATED&nbsp;BY&nbsp;'-'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;i_vbap_disp-bstdk_e+0(4)&nbsp;i_vbap_disp-bstdk_e+4(2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-bstdk_e+6(2)&nbsp;INTO&nbsp;da2&nbsp;SEPARATED&nbsp;BY&nbsp;'-'.<br />
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;REPLACE&nbsp;ALL&nbsp;OCCURRENCES&nbsp;OF&nbsp;','&nbsp;IN&nbsp;i_vbap_disp-bezei&nbsp;WITH&nbsp;'-'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHIFT&nbsp;i_vbap_disp-matnr&nbsp;LEFT&nbsp;DELETING&nbsp;LEADING&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_vbap_disp-matnr&nbsp;NO-GAPS.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHIFT&nbsp;i_vbap_disp-kunnr&nbsp;LEFT&nbsp;DELETING&nbsp;LEADING&nbsp;'0'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONDENSE&nbsp;i_vbap_disp-kunnr&nbsp;NO-GAPS.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;to&nbsp;fetch&nbsp;company&nbsp;code<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bwkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;i_bwkey<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;werks&nbsp;=&nbsp;i_vbap_disp-werks.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SELECT&nbsp;SINGLE&nbsp;bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;t001k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;cocode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;bwkey&nbsp;=&nbsp;i_bwkey.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;&nbsp;&nbsp;da1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'Date'&nbsp;&nbsp;"&nbsp;i_vbap_disp-erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cocode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-matnr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'Material'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-matkl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'Material&nbsp;Group'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-werks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;'Depot'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-vkbur&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'Sales&nbsp;Office'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-kunnr&nbsp;&nbsp;&nbsp;&nbsp;"&nbsp;'Customer'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-bezei&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'Reason'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_vbap_disp-vbeln&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'ZL&D&nbsp;No'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_klmeng&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'Qty(Nos)'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ld_sales&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"'ZL&D&nbsp;Value'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rvdate1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"RV&nbsp;Date&nbsp;"++&nbsp;by&nbsp;Asif&nbsp;17.03.2018<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;it_line&nbsp;SEPARATED&nbsp;BY&nbsp;s_del.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;it_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLEAR:&nbsp;it_line.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_gui_frontend_services=&gt;file_save_dialog<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_extension&nbsp;=&nbsp;'csv'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default_file_name&nbsp;=&nbsp;'ZL&D&nbsp;Report'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial_directory&nbsp;=&nbsp;'c:\'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ld_filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ld_path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fullpath&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ld_fullpath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user_action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;ld_result.<br />
+<br />
+&nbsp;&nbsp;IF&nbsp;ld_filename&nbsp;NE&nbsp;''.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Download&nbsp;an&nbsp;Internal&nbsp;Table&nbsp;to&nbsp;the&nbsp;PC<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GUI_DOWNLOAD'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename&nbsp;=&nbsp;ld_fullpath<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dat_mode&nbsp;=&nbsp;'X'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_tab&nbsp;=&nbsp;it_line&nbsp;"i_head<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;=&nbsp;1.<br />
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.                    " FOREGROUND<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Form&nbsp;&nbsp;BACKGROUND<br />
+*&---------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+*&nbsp;&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&nbsp;&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*----------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM background .<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Open&nbsp;Job&nbsp;Scheduling&nbsp;Without&nbsp;Dialog&nbsp;(Including&nbsp;COMMIT&nbsp;WORK)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'JOB_OPEN'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delanfrep&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobgroup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdlstrtdt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-datum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sdlstrttm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-uzeit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cant_create_job&nbsp;&nbsp;=&nbsp;01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_job_data&nbsp;=&nbsp;02<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;=&nbsp;03.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;NE&nbsp;0.<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Read,&nbsp;determine,&nbsp;change&nbsp;spool&nbsp;print&nbsp;parameters&nbsp;and&nbsp;archive<br />
+*parameters<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'GET_PRINT_PARAMETERS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;immediately&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'&nbsp;&nbsp;&nbsp;"&nbsp;leave&nbsp;blank&nbsp;so&nbsp;is&nbsp;not&nbsp;sent&nbsp;to<br />
+   </div>
+   <div class="codeComment">
+*print<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_dialog&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out_parameters&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;print_parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;archive_info_not_found&nbsp;=&nbsp;1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_print_params&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_archive_params&nbsp;=&nbsp;3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;4.<br />
+<br />
+<br />
+&nbsp;&nbsp;SUBMIT&nbsp;zmil0mmro_zld_report_bg&nbsp;TO&nbsp;SAP-SPOOL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_kunnr&nbsp;IN&nbsp;s_kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_vkbur&nbsp;IN&nbsp;s_vkbur<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_erdat&nbsp;IN&nbsp;s_erdat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_werks&nbsp;IN&nbsp;s_werks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_matnr&nbsp;IN&nbsp;s_matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_mvgr1&nbsp;IN&nbsp;s_mvgr1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_vkaus&nbsp;IN&nbsp;s_vkaus<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;detail&nbsp;=&nbsp;detail<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;summary&nbsp;=&nbsp;summary<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;s_del&nbsp;=&nbsp;s_del<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;alv&nbsp;=&nbsp;alv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;fore&nbsp;=&nbsp;fore<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;backg&nbsp;=&nbsp;backg<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;filepath&nbsp;=&nbsp;filepath<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;email&nbsp;IN&nbsp;email<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SPOOL&nbsp;PARAMETERS&nbsp;print_parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WITHOUT&nbsp;SPOOL&nbsp;DYNPRO<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VIA&nbsp;JOB&nbsp;jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NUMBER&nbsp;jobcount&nbsp;AND&nbsp;RETURN.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;Close&nbsp;Background&nbsp;Request&nbsp;With&nbsp;COMMIT&nbsp;WORK<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'JOB_CLOSE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobcount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;jobcount<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;jobname<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strtimmed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cant_start_immediate&nbsp;=&nbsp;01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invalid_startdate&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;02<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jobname_missing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;03<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_close_failed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;04<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_nosteps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;05<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job_notex&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;06<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lock_failed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;07<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;99.<br />
+&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;EQ&nbsp;0.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;"error&nbsp;processing<br />
+&nbsp;&nbsp;ENDIF.<br />
+<br />
+<br />
+ENDFORM.                    " BACKGROUND<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;ALV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ALV&nbsp;Display<br />
+*&nbsp;BACKG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Background<br />
+*&nbsp;DETAIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Detail<br />
+*&nbsp;EMAIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email<br />
+*&nbsp;FILEPATH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Filepath<br />
+*&nbsp;FORE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Foreground<br />
+*&nbsp;SUMMARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Summary<br />
+*&nbsp;S_DEL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delimiter<br />
+*&nbsp;S_ERDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create&nbsp;Date<br />
+*&nbsp;S_KUNNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Customer<br />
+*&nbsp;S_MATNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material<br />
+*&nbsp;S_MVGR1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Material&nbsp;group1<br />
+*&nbsp;S_VKAUS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Indicator<br />
+*&nbsp;S_VKBUR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sales&nbsp;office<br />
+*&nbsp;S_WERKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plant<br />
+<br />
+<br />
+*Messages<br />
+*----------------------------------------------------------<br />
+*<br />
+*&nbsp;Message&nbsp;class:&nbsp;ZSD<br />
+*000&nbsp;&nbsp;&nbsp;&&nbsp;&&nbsp;&&nbsp;&<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
+   <tr>
+<td class="footer">Extracted by Mass Download version 1.5.5 - E.G.Mellodew. 1998-2025. Sap Release 758</td>
+   </tr>
+</table>
+</body>
+</html>
